@@ -13,6 +13,7 @@ class App extends Component {
       searchWord: "",
       isSearching: true,
       clickedArtistId: null,
+      albumArt: ""
     }
   }
 
@@ -41,7 +42,8 @@ class App extends Component {
         this.setState({
           clickedArtistId: json.results.artistId,
           artistResults: json.results,
-          isSearching: false
+          isSearching: false,
+          albumArt: json.results.artworkUrl60
         });
       })
   }
@@ -52,15 +54,22 @@ class App extends Component {
   }
 
 
-
   render() {
 
     const listMatches = this.state.results.map((artist) => <li id={artist.artistId} onClick={this.getAlbumInfo}>{artist.artistName}</li>);
-    const listAlbums = this.state.artistResults.map((album) => <li id={album.collectionId}>{album.collectionName}</li>);
+
+    const listAlbums = this.state.artistResults.map((album) =>
+      <li pic={album.artworkUrl60} id={album.collectionId}><img src={album.artworkUrl60} alt="" />{album.collectionName}</li>
+    );
+
+
 
     if (this.state.isSearching) {
       return (
         <div className="App">
+
+          {/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" /> */}
+
           <div>
             <input type="text" onChange={this.setSearchWord} placeholder="Search artist..." />
             <button onClick={this.getInfo}>Search</button>
